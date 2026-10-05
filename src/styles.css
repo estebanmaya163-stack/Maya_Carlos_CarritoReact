@@ -1,0 +1,134 @@
+:root {
+  --verde: #1f4d2e;
+  --verde-claro: #e7f0e9;
+  --panela: #c9831a;
+  --tinta: #1d2420;
+  --gris: #5d6b63;
+  --borde: #d5ddd7;
+  --fondo: #f7f8f6;
+  --alerta: #8f2d1f;
+  font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  color: var(--tinta);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  /* pared de madera */
+  background-color: #c9a77c;
+  background-image:
+    repeating-linear-gradient(90deg, rgba(60, 35, 10, .22) 0 2px, transparent 2px 130px),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, .05) 0 3px, rgba(0, 0, 0, .04) 3px 6px);
+}
+button, input { font: inherit; }
+:focus-visible { outline: 3px solid var(--panela); outline-offset: 2px; }
+
+/* Navbar fija */
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0; height: 64px; z-index: 20;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 1.25rem; background: var(--verde); color: #fff;
+}
+.navbar-brand { margin: 0; font-size: 1.35rem; letter-spacing: .02em; }
+.cart-button {
+  position: relative; background: transparent; border: 0; color: #fff;
+  padding: .5rem; border-radius: 8px; cursor: pointer; display: grid; place-items: center;
+}
+.cart-button:hover { background: rgba(255,255,255,.12); }
+.cart-badge {
+  position: absolute; top: -2px; right: -4px; min-width: 20px; height: 20px; padding: 0 5px;
+  border-radius: 10px; background: var(--panela); color: #fff; font-size: .75rem; font-weight: 700;
+  display: grid; place-items: center;
+}
+
+/* Toldo de la tienda */
+.navbar::after {
+  content: "";
+  position: absolute; left: 0; right: 0; top: 100%; height: 44px; pointer-events: none;
+  background: repeating-linear-gradient(90deg, #b3261e 0 40px, #fff 40px 80px);
+  -webkit-mask:
+    linear-gradient(#000 0 0) top / 100% calc(100% - 20px) no-repeat,
+    radial-gradient(circle 20px at 50% 0, #000 19.5px, transparent 20px) bottom / 40px 20px repeat-x;
+  mask:
+    linear-gradient(#000 0 0) top / 100% calc(100% - 20px) no-repeat,
+    radial-gradient(circle 20px at 50% 0, #000 19.5px, transparent 20px) bottom / 40px 20px repeat-x;
+}
+
+/* Catálogo */
+.catalog { max-width: 1040px; margin: 0 auto; padding: 130px 1.25rem 2rem; }
+.catalog-title {
+  display: inline-block; margin: 0 0 1.5rem; padding: .5rem 1.25rem; font-size: 1.3rem;
+  background: var(--verde); color: #fff; border-radius: 6px; border: 3px solid #f3e9d2;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, .25);
+}
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; }
+.card {
+  background: #fff; border: 1px solid var(--borde); border-radius: 10px; padding: 1rem;
+  box-shadow: 0 6px 0 rgba(70, 40, 10, .35);
+  display: flex; flex-direction: column; gap: .35rem;
+}
+.card-title { margin: 0; font-size: 1.05rem; }
+.card-price { margin: 0; font-size: 1.25rem; font-weight: 700; color: var(--verde); }
+.card-stock { margin: 0 0 .5rem; font-size: .88rem; color: var(--gris); }
+.card-stock.agotado { color: var(--alerta); font-weight: 600; }
+.card-actions { display: flex; gap: .5rem; margin-top: auto; }
+
+.qty-input {
+  width: 72px; padding: .5rem; text-align: center; border: 1px solid var(--borde);
+  border-radius: 8px; background: #fff; -moz-appearance: textfield; appearance: textfield;
+}
+.qty-input::-webkit-outer-spin-button, .qty-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+.btn { border: 0; border-radius: 8px; padding: .55rem 1rem; cursor: pointer; font-weight: 600; }
+.btn-primary { flex: 1; background: var(--verde); color: #fff; }
+.btn-primary:hover:not(:disabled) { background: #173b23; }
+.btn:disabled { background: #b9c3bc; color: #fff; cursor: not-allowed; }
+.btn-link { background: none; border: 0; color: var(--alerta); cursor: pointer; text-decoration: underline; padding: .25rem; }
+.icon-btn {
+  width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--borde);
+  background: #fff; cursor: pointer; font-size: 1.1rem; line-height: 1;
+}
+.icon-btn:hover { background: var(--verde-claro); }
+
+/* Panel lateral del carrito */
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,.4); opacity: 0; pointer-events: none; transition: opacity .2s; z-index: 30; }
+.overlay.visible { opacity: 1; pointer-events: auto; }
+.cart-panel {
+  position: fixed; top: 0; right: 0; bottom: 0; width: min(420px, 100%); background: #fff; z-index: 40;
+  display: flex; flex-direction: column; transform: translateX(100%); transition: transform .25s ease;
+  visibility: hidden;
+}
+.cart-panel.open { transform: translateX(0); visibility: visible; }
+.cart-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; border-bottom: 1px solid var(--borde); }
+.cart-header h2 { margin: 0; font-size: 1.2rem; }
+.cart-empty { padding: 1.5rem 1.25rem; color: var(--gris); flex: 1; }
+.cart-list { list-style: none; margin: 0; padding: 0; overflow-y: auto; flex: 1; }
+.cart-item { padding: 1rem 1.25rem; border-bottom: 1px solid var(--borde); display: grid; gap: .6rem; }
+.cart-item-info { display: flex; flex-direction: column; gap: .15rem; }
+.cart-item-info span { color: var(--gris); font-size: .9rem; }
+.cart-item-controls { display: flex; align-items: center; gap: .4rem; }
+.cart-item-footer { display: flex; justify-content: space-between; align-items: center; }
+.subtotal { font-weight: 600; }
+.cart-summary { padding: 1rem 1.25rem; background: var(--verde-claro); border-top: 1px solid var(--borde); }
+.cart-summary p { margin: .2rem 0; display: flex; justify-content: space-between; }
+.cart-total { font-size: 1.2rem; }
+
+/* Toasts */
+.toast-container {
+  position: fixed; top: 76px; right: 1rem; z-index: 60; display: flex; flex-direction: column; gap: .5rem;
+  width: min(380px, calc(100% - 2rem));
+}
+.toast {
+  display: flex; align-items: center; gap: .6rem; padding: .75rem .9rem; background: var(--tinta); color: #fff;
+  border-left: 5px solid var(--panela); border-radius: 8px; box-shadow: 0 6px 18px rgba(0,0,0,.25);
+  animation: entrar .18s ease-out;
+}
+.toast-msg { flex: 1; font-size: .93rem; }
+.toast-action { background: var(--panela); color: #fff; border: 0; border-radius: 6px; padding: .35rem .7rem; font-weight: 700; cursor: pointer; }
+.toast-close { background: none; border: 0; color: #fff; cursor: pointer; opacity: .75; font-size: 1rem; }
+.toast-close:hover { opacity: 1; }
+@keyframes entrar { from { transform: translateY(-8px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .cart-panel, .overlay, .toast { transition: none; animation: none; }
+}
