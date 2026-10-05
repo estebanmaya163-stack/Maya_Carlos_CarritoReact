@@ -2,7 +2,7 @@
 
 Reto práctico de React: carrito de compras con validaciones de stock y toasts.
 
-- **Aprendiz:** _Nombre Apellido_
+- **Aprendiz:** Carlos Maya
 - **Ficha:** 3409924
 - **Instructor:** Daniel Alfonso Martínez Payán
 - **Tecnología:** React 18 + Vite
